@@ -1,3 +1,5 @@
+import 'package:bloc_tut/constants/enum.dart';
+import 'package:bloc_tut/logic/cubit/internet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_tut/logic/cubit/counter_cubit.dart';
@@ -22,62 +24,81 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: null,
       body: Center(
         child: Container(
-            // height: 200,
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            height: 200,
+            child: ListView(
               children: [
-                FloatingActionButton(
-                  onPressed: BlocProvider.of<CounterCubit>(context).decrement,
-                  child: Icon(Icons.remove),
-                ),
-                BlocConsumer<CounterCubit, CounterState>(
-                  listener: (context, state) {
-                    if (state.isIncremented) {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        content: Text('Increamented'),
-                        duration: Duration(milliseconds: 300),
-                      ));
-                    } else {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        content: Text('Decreamented'),
-                        duration: Duration(milliseconds: 300),
-                      ));
-                    }
-                  },
-                  builder: (context, state) {
-                    return Text('${state.counterValue}');
-                  },
-                ),
-                FloatingActionButton(
-                  onPressed: BlocProvider.of<CounterCubit>(context).increment,
-                  child: Icon(Icons.add),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    BlocBuilder<InternetCubit, InternetState>(
+                      builder: (context, state) {
+                        if (state is InternetConnected &&
+                            state.connectionType == ConnectionType.Wifi) {
+                          return Text('Wi fi');
+                        } else if (state is InternetConnected &&
+                            state.connectionType == ConnectionType.Mobile) {
+                          return Text('mobile');
+                        } else if (state is InternetDisconnected) {
+                          return Text('Disconnected');
+                        }
+                        return CircularProgressIndicator();
+                      },
+                    ),
+                    Text(
+                      'You have pushed the button this many times:',
+                    ),
+                    
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     FloatingActionButton(
+                    //       onPressed: BlocProvider.of<CounterCubit>(context).decrement,
+                    //       child: Icon(Icons.remove),
+                    //     ),
+                        BlocConsumer<CounterCubit, CounterState>(
+                          listener: (context, state) {
+                            if (state.isIncremented) {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text('Increamented'),
+                                duration: Duration(milliseconds: 300),
+                              ));
+                            } else {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text('Decreamented'),
+                                duration: Duration(milliseconds: 300),
+                              ));
+                            }
+                          },
+                          builder: (context, state) {
+                            return Text('${state.counterValue}');
+                          },
+                        ),
+                    //     FloatingActionButton(
+                    //       onPressed: BlocProvider.of<CounterCubit>(context).increment,
+                    //       child: Icon(Icons.add),
+                    //     ),
+                    //   ],
+                    // ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    MaterialButton(
+                      color: widget.color,
+                      onPressed: () => Navigator.of(context).pushNamed('/second'),
+                      child: Text('Go to second screen'),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    MaterialButton(
+                      color: widget.color,
+                      onPressed: () => Navigator.of(context).pushNamed('/third'),
+                      child: Text('Go to third screen'),
+                    ),
+                  ],
                 ),
               ],
-            ),
-            SizedBox(
-              height: 24,
-            ),
-            MaterialButton(
-              color: widget.color,
-              onPressed: () => Navigator.of(context).pushNamed('/second'),
-              child: Text('Go to second screen'),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            MaterialButton(
-              color: widget.color,
-              onPressed: () => Navigator.of(context).pushNamed('/third'),
-              child: Text('Go to third screen'),
-            ),
-          ],
-        )),
+            )),
       ),
     );
   }
