@@ -8,19 +8,22 @@ import 'package:meta/meta.dart';
 part 'counter_state.dart';
 
 class CounterCubit extends Cubit<CounterState> {
-  final InternetCubit internetCubit;
-  StreamSubscription connectivityStreamSubscription;
-  CounterCubit({@required this.internetCubit})
+  // final InternetCubit internetCubit;
+  // not used in many cases
+  // StreamSubscription connectivityStreamSubscription;
+  
+  CounterCubit()
       : super(CounterState(counterValue: 0)) {
-    connectivityStreamSubscription = internetCubit.stream.listen((internetState) {
-      if (internetState is InternetConnected &&
-          internetState.connectionType == ConnectionType.Wifi) {
-        increment();
-      } else if (internetState is InternetConnected &&
-          internetState.connectionType == ConnectionType.Wifi) {
-        decrement();
-      }
-    });
+    // not used in many cases
+    // connectivityStreamSubscription = internetCubit.stream.listen((internetState) {
+    //   if (internetState is InternetConnected &&
+    //       internetState.connectionType == ConnectionType.Wifi) {
+    //     increment();
+    //   } else if (internetState is InternetConnected &&
+    //       internetState.connectionType == ConnectionType.Wifi) {
+    //     decrement();
+    //   }
+    // });
   }
 
   void increment() => emit(
@@ -29,9 +32,9 @@ class CounterCubit extends Cubit<CounterState> {
   void decrement() => emit(
       CounterState(counterValue: state.counterValue - 1, isIncremented: false));
 
-  @override
-  Future<void> close() {
-    connectivityStreamSubscription.cancel();
-    return super.close();
-  }
+  // @override
+  // Future<void> close() {
+  //   connectivityStreamSubscription.cancel();
+  //   return super.close();
+  // }
 }
