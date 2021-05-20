@@ -6,7 +6,7 @@ class WeatherRepo {
   Future<DataModel> getWeather(String city) async {
     print('city: $city');
     final result = await http.get(
-        'https://api.weatherapi.com/v1/current.json?key=85a1125cb3f440fca7f72303212005&q=$city&aqi=no');
+        'https://api.weatherapi.com/v1/current.json?key=YOUR_API_KEY&q=$city&aqi=no');
     if (result.statusCode != 200) throw Exception();
     print(result.statusCode);
     return parseJson(result.body);
