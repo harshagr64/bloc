@@ -11,7 +11,7 @@ class SigninInitial extends SigninState {}
 
 class LoadingState extends SigninState {}
 
-class LoadedState extends SigninState {
+class LoadedState extends SigninState { 
   final DataModel _dataModel;
   DataModel get dataModel => _dataModel;
   LoadedState(this._dataModel);
