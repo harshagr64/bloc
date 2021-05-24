@@ -1,29 +1,55 @@
+import 'package:bloc_tut/login_bloc/logic/bloc/signin_bloc.dart';
+import 'package:bloc_tut/login_bloc/presentation/login_screen.dart';
+import 'package:bloc_tut/login_bloc/repo/login_repo.dart';
+import 'package:bloc_tut/responsive_ui/presentation/styling.dart';
+import 'package:bloc_tut/responsive_ui/presentation/welcome_screen.dart';
+import 'package:bloc_tut/responsive_ui/size_config.dart';
 import 'package:bloc_tut/weather_app/blocs/bloc/weather_bloc.dart';
 import 'package:bloc_tut/weather_app/models/data_model.dart';
 import 'package:bloc_tut/weather_app/repository/weather_repo.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
+  final SinginRepo singinRepo = SinginRepo();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => WeatherBloc(WeatherRepo()),
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.grey[900],
-            body: SearchPage(),
-          ),
-        ));
+      create: (context) => SigninBloc(singinRepo),
+      child: MaterialApp(
+        title: 'Login Page',
+        home: LoginScreen(),
+      ),
+    );
+    // return LayoutBuilder(
+    //   builder: (BuildContext context, BoxConstraints constraints) {
+    //     return OrientationBuilder(
+    //       builder: (BuildContext context, Orientation orientation) {
+    //         SizeConfig().init(constraints, orientation);
+    //         return MaterialApp(
+    //           title: 'Flutter Demo',
+    //           theme: AppTheme.lightTheme,
+    //           home: WelcomeScreen(),
+    //           // home: Scaffold(
+    //           //   resizeToAvoidBottomInset: false,
+    //           //   backgroundColor: Colors.grey[900],
+    //           //   body: SearchPage(),
+    //           // ),
+    //         );
+    //       },
+    //     );
+    //   },
+    // );
   }
 }
 
